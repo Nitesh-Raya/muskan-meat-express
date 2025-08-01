@@ -121,11 +121,6 @@ const Footer = () => {
             </div>
           </div>
           
-          <div className="text-center mt-4">
-            <p className="text-xs opacity-70">
-              Made with ❤️ for fresh meat lovers in Kathmandu Valley
-            </p>
-          </div>
         </div>
       </div>
     </footer>

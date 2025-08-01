@@ -39,9 +39,19 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 transform hover:scale-105 border border-border bg-gradient-to-b from-card to-card/50">
       <CardContent className="p-6">
-        {/* Product Image Placeholder */}
-        <div className="w-full h-48 bg-gradient-to-br from-muted to-muted/50 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
-          <div className="text-6xl opacity-20">🥩</div>
+        {/* Product Image */}
+        <div className="w-full h-48 bg-gradient-to-br from-muted to-muted/50 rounded-lg mb-4 relative overflow-hidden">
+          {product.image ? (
+            <img 
+              src={product.image} 
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="text-6xl opacity-20">🥩</div>
+            </div>
+          )}
           {product.featured && (
             <Badge className="absolute top-2 right-2 bg-accent text-accent-foreground">
               Popular
