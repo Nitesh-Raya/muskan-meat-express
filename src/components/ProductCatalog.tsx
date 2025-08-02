@@ -2,49 +2,66 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ProductCard, { Product } from './ProductCard';
 
-// Import natural product images
+// Import specific product images
 import chickenWholeImg from '@/assets/natural-chicken-whole.jpg';
 import chickenPiecesImg from '@/assets/natural-chicken-pieces.jpg';
 import chickenBreastImg from '@/assets/natural-chicken-breast-raw.jpg';
-import muttonGoatImg from '@/assets/natural-mutton-goat.jpg';
-import beefRawImg from '@/assets/natural-beef-raw.jpg';
+import chickenDrumsticksImg from '@/assets/chicken-drumsticks.jpg';
+import chickenWingsImg from '@/assets/chicken-wings.jpg';
+import chickenLiverImg from '@/assets/chicken-liver.jpg';
+import muttonCurryImg from '@/assets/natural-mutton-goat.jpg';
+import muttonBonelessImg from '@/assets/mutton-boneless-fresh.jpg';
+import muttonMinceImg from '@/assets/mutton-mince.jpg';
+import muttonLiverImg from '@/assets/mutton-liver.jpg';
+import muttonRibsImg from '@/assets/mutton-ribs-chops.jpg';
+import buffaloRawImg from '@/assets/natural-beef-raw.jpg';
+import buffaloBonelessImg from '@/assets/buffalo-boneless.jpg';
+import buffaloMinceImg from '@/assets/buffalo-mince.jpg';
+import buffaloLiverImg from '@/assets/buffalo-liver.jpg';
 import fishFreshImg from '@/assets/natural-fish-fresh.jpg';
+import tilapiaImg from '@/assets/tilapia-fish.jpg';
 import seafoodPrawnsImg from '@/assets/natural-seafood-prawns.jpg';
+import dryFishImg from '@/assets/dry-fish-sukuti.jpg';
+import crabImg from '@/assets/fresh-crab.jpg';
+import tandooriChickenImg from '@/assets/tandoori-chicken-marinated.jpg';
+import seekhKababImg from '@/assets/chicken-seekh-kabab.jpg';
+import buffaloMomosImg from '@/assets/buffalo-momos.jpg';
+import chickenNuggetsImg from '@/assets/chicken-nuggets.jpg';
 
 const PRODUCTS: Product[] = [
   // Chicken
   { id: '1', name: 'Whole Chicken (With Skin)', price: 360, unit: 'kg', category: 'Chicken', featured: true, image: chickenWholeImg },
   { id: '2', name: 'Chicken Curry Cut', price: 380, unit: 'kg', category: 'Chicken', featured: true, image: chickenPiecesImg },
   { id: '3', name: 'Boneless Chicken Breast', price: 520, unit: 'kg', category: 'Chicken', image: chickenBreastImg },
-  { id: '4', name: 'Chicken Drumsticks', price: 420, unit: 'kg', category: 'Chicken', image: chickenWholeImg },
-  { id: '5', name: 'Chicken Wings', price: 400, unit: 'kg', category: 'Chicken', image: chickenPiecesImg },
-  { id: '6', name: 'Chicken Liver', price: 300, unit: 'kg', category: 'Chicken', image: chickenBreastImg },
+  { id: '4', name: 'Chicken Drumsticks', price: 420, unit: 'kg', category: 'Chicken', image: chickenDrumsticksImg },
+  { id: '5', name: 'Chicken Wings', price: 400, unit: 'kg', category: 'Chicken', image: chickenWingsImg },
+  { id: '6', name: 'Chicken Liver', price: 300, unit: 'kg', category: 'Chicken', image: chickenLiverImg },
 
   // Mutton
-  { id: '7', name: 'Mutton Curry Cut', price: 1100, unit: 'kg', category: 'Mutton', featured: true, image: muttonGoatImg },
-  { id: '8', name: 'Boneless Mutton', price: 1300, unit: 'kg', category: 'Mutton', image: beefRawImg },
-  { id: '9', name: 'Mutton Mince (Keema)', price: 1250, unit: 'kg', category: 'Mutton', image: muttonGoatImg },
-  { id: '10', name: 'Mutton Liver', price: 700, unit: 'kg', category: 'Mutton', image: beefRawImg },
-  { id: '11', name: 'Mutton Ribs & Chops', price: 1150, unit: 'kg', category: 'Mutton', image: muttonGoatImg },
+  { id: '7', name: 'Mutton Curry Cut', price: 1100, unit: 'kg', category: 'Mutton', featured: true, image: muttonCurryImg },
+  { id: '8', name: 'Boneless Mutton', price: 1300, unit: 'kg', category: 'Mutton', image: muttonBonelessImg },
+  { id: '9', name: 'Mutton Mince (Keema)', price: 1250, unit: 'kg', category: 'Mutton', image: muttonMinceImg },
+  { id: '10', name: 'Mutton Liver', price: 700, unit: 'kg', category: 'Mutton', image: muttonLiverImg },
+  { id: '11', name: 'Mutton Ribs & Chops', price: 1150, unit: 'kg', category: 'Mutton', image: muttonRibsImg },
 
   // Buffalo Meat
-  { id: '12', name: 'Buff Curry Cut', price: 450, unit: 'kg', category: 'Buffalo', image: beefRawImg },
-  { id: '13', name: 'Boneless Buff', price: 550, unit: 'kg', category: 'Buffalo', image: muttonGoatImg },
-  { id: '14', name: 'Buff Mince', price: 520, unit: 'kg', category: 'Buffalo', image: beefRawImg },
-  { id: '15', name: 'Buff Liver', price: 300, unit: 'kg', category: 'Buffalo', image: muttonGoatImg },
+  { id: '12', name: 'Buff Curry Cut', price: 450, unit: 'kg', category: 'Buffalo', image: buffaloRawImg },
+  { id: '13', name: 'Boneless Buff', price: 550, unit: 'kg', category: 'Buffalo', image: buffaloBonelessImg },
+  { id: '14', name: 'Buff Mince', price: 520, unit: 'kg', category: 'Buffalo', image: buffaloMinceImg },
+  { id: '15', name: 'Buff Liver', price: 300, unit: 'kg', category: 'Buffalo', image: buffaloLiverImg },
 
   // Fish & Seafood
   { id: '16', name: 'Rohu/Katla Fish', price: 480, unit: 'kg', category: 'Fish & Seafood', image: fishFreshImg },
-  { id: '17', name: 'Tilapia', price: 450, unit: 'kg', category: 'Fish & Seafood', image: fishFreshImg },
+  { id: '17', name: 'Tilapia', price: 450, unit: 'kg', category: 'Fish & Seafood', image: tilapiaImg },
   { id: '18', name: 'Prawns (Medium)', price: 950, unit: 'kg', category: 'Fish & Seafood', featured: true, image: seafoodPrawnsImg },
-  { id: '19', name: 'Dry Fish (Sukuti)', price: 750, unit: 'kg', category: 'Fish & Seafood', image: fishFreshImg },
-  { id: '20', name: 'Crab (On Order)', price: 250, unit: 'piece', category: 'Fish & Seafood', image: seafoodPrawnsImg },
+  { id: '19', name: 'Dry Fish (Sukuti)', price: 750, unit: 'kg', category: 'Fish & Seafood', image: dryFishImg },
+  { id: '20', name: 'Crab (On Order)', price: 250, unit: 'piece', category: 'Fish & Seafood', image: crabImg },
 
   // Ready-to-Cook
-  { id: '21', name: 'Tandoori Chicken (Marinated)', price: 350, unit: '500g', category: 'Ready-to-Cook', featured: true, image: chickenBreastImg },
-  { id: '22', name: 'Chicken Seekh Kabab (Frozen)', price: 280, unit: '6 pcs', category: 'Ready-to-Cook', image: chickenPiecesImg },
-  { id: '23', name: 'Buff Momos (Frozen)', price: 200, unit: '10 pcs', category: 'Ready-to-Cook', image: beefRawImg },
-  { id: '24', name: 'Chicken Nuggets', price: 220, unit: 'pack', category: 'Ready-to-Cook', image: chickenWholeImg },
+  { id: '21', name: 'Tandoori Chicken (Marinated)', price: 350, unit: '500g', category: 'Ready-to-Cook', featured: true, image: tandooriChickenImg },
+  { id: '22', name: 'Chicken Seekh Kabab (Frozen)', price: 280, unit: '6 pcs', category: 'Ready-to-Cook', image: seekhKababImg },
+  { id: '23', name: 'Buff Momos (Frozen)', price: 200, unit: '10 pcs', category: 'Ready-to-Cook', image: buffaloMomosImg },
+  { id: '24', name: 'Chicken Nuggets', price: 220, unit: 'pack', category: 'Ready-to-Cook', image: chickenNuggetsImg },
 ];
 
 const CATEGORIES = ['All', 'Chicken', 'Mutton', 'Buffalo', 'Fish & Seafood', 'Ready-to-Cook'];
