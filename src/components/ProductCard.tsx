@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Minus, ShoppingCart } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface Product {
   id: string;
@@ -23,8 +24,75 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   const [quantity, setQuantity] = useState(1);
+  const [inventory, setInventory] = useState<{
+    stock_quantity: number;
+    status: string;
+  } | null>(null);
+
+  useEffect(() => {
+    fetchInventory();
+  }, [product.id]);
+
+  const fetchInventory = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('inventory')
+        .select('stock_quantity, status')
+        .eq('product_id', product.id)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') { // Not found is ok
+        console.error('Error fetching inventory:', error);
+      } else {
+        setInventory(data);
+      }
+    } catch (error) {
+      console.error('Error fetching inventory:', error);
+    }
+  };
+
+  const getStockBadge = () => {
+    if (!inventory) return null;
+    
+    switch (inventory.status) {
+      case 'in_stock':
+        return (
+          <Badge variant="secondary" className="flex items-center gap-1 bg-green-100 text-green-800">
+            <CheckCircle className="h-3 w-3" />
+            In Stock
+          </Badge>
+        );
+      case 'low_stock':
+        return (
+          <Badge variant="secondary" className="flex items-center gap-1 bg-orange-100 text-orange-800">
+            <AlertTriangle className="h-3 w-3" />
+            Only {inventory.stock_quantity} Left!
+          </Badge>
+        );
+      case 'out_of_stock':
+        return (
+          <Badge variant="destructive" className="flex items-center gap-1">
+            <X className="h-3 w-3" />
+            Out of Stock
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const isOutOfStock = inventory?.status === 'out_of_stock';
 
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      toast({
+        title: "Out of Stock",
+        description: `${product.name} is currently out of stock.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
     onAddToCart(product, quantity);
     toast({
       title: "Added to cart!",
@@ -68,12 +136,13 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
             <p className="text-sm text-muted-foreground">{product.category}</p>
           </div>
 
-          {/* Price */}
+          {/* Price and Stock Status */}
           <div className="flex items-center justify-between">
             <div>
               <span className="text-2xl font-bold text-primary">₹{product.price}</span>
               <span className="text-sm text-muted-foreground">/{product.unit}</span>
             </div>
+            {getStockBadge()}
           </div>
 
           {/* Quantity Selector */}
