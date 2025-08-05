@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import ProductCard, { Product } from './ProductCard';
 
@@ -73,9 +73,26 @@ interface ProductCatalogProps {
 const ProductCatalog = ({ onAddToCart }: ProductCatalogProps) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const filteredProducts = selectedCategory === 'All' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(product => product.category === selectedCategory);
+  // Memoize filtered products to avoid unnecessary recalculations
+  const filteredProducts = useMemo(() => {
+    return selectedCategory === 'All' 
+      ? PRODUCTS 
+      : PRODUCTS.filter(product => product.category === selectedCategory);
+  }, [selectedCategory]);
+
+  // Memoize category buttons to avoid re-renders
+  const categoryButtons = useMemo(() => (
+    CATEGORIES.map((category) => (
+      <Button
+        key={category}
+        variant={selectedCategory === category ? "default" : "outline"}
+        onClick={() => setSelectedCategory(category)}
+        className="transition-all duration-300"
+      >
+        {category}
+      </Button>
+    ))
+  ), [selectedCategory]);
 
   return (
     <section id="products" className="py-16 bg-background">
@@ -93,16 +110,7 @@ const ProductCatalog = ({ onAddToCart }: ProductCatalogProps) => {
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {CATEGORIES.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              onClick={() => setSelectedCategory(category)}
-              className="transition-all duration-300"
-            >
-              {category}
-            </Button>
-          ))}
+          {categoryButtons}
         </div>
 
         {/* Products Grid */}

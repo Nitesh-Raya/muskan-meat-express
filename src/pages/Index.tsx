@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import ProductCatalog from '@/components/ProductCatalog';
@@ -8,6 +8,7 @@ import Reviews from '@/components/Reviews';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import { Product } from '@/components/ProductCard';
+import { InventoryProvider } from '@/hooks/useInventory';
 
 const Index = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -61,30 +62,32 @@ const Index = () => {
   const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header
-        cartItems={totalCartItems}
-        onCartClick={() => setIsCartOpen(true)}
-      />
-      
-      <main>
-        <Hero />
-        <ProductCatalog onAddToCart={handleAddToCart} />
-        <DeliveryInfo />
-        <Reviews />
-        <Contact />
-      </main>
-      
-      <Footer />
-      
-      <Cart
-        items={cartItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onClose={() => setIsCartOpen(false)}
-        isOpen={isCartOpen}
-      />
-    </div>
+    <InventoryProvider>
+      <div className="min-h-screen bg-background">
+        <Header
+          cartItems={totalCartItems}
+          onCartClick={() => setIsCartOpen(true)}
+        />
+        
+        <main>
+          <Hero />
+          <ProductCatalog onAddToCart={handleAddToCart} />
+          <DeliveryInfo />
+          <Reviews />
+          <Contact />
+        </main>
+        
+        <Footer />
+        
+        <Cart
+          items={cartItems}
+          onUpdateQuantity={handleUpdateQuantity}
+          onRemoveItem={handleRemoveItem}
+          onClose={() => setIsCartOpen(false)}
+          isOpen={isCartOpen}
+        />
+      </div>
+    </InventoryProvider>
   );
 };
 

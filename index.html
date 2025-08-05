@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/assets/muskan-logo.png" as="image">
+    <link rel="preload" href="/src/assets/hero-meat-shop.jpg" as="image">
+    
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <title>Muskan Meat Shop - Fresh Quality Meat Delivery in Kathmandu</title>
     <meta name="description" content="Order fresh, quality meat online from Muskan Meat Shop. We deliver premium chicken, mutton, buffalo, fish & seafood across Kathmandu. Same-day delivery available. Call 9828913363." />
     <meta name="keywords" content="meat shop kathmandu, fresh meat delivery, chicken mutton buffalo, online meat order, meat delivery nepal, halal meat, fresh seafood kathmandu" />
@@ -138,5 +146,19 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  </body>
+    
+    <!-- Register service worker for caching -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
 </html>

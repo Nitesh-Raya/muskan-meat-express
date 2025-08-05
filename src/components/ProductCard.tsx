@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Minus, ShoppingCart, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { useInventory } from '@/hooks/useInventory';
 
 export interface Product {
   id: string;
@@ -22,34 +22,11 @@ interface ProductCardProps {
   onAddToCart: (product: Product, quantity: number) => void;
 }
 
-const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
+const ProductCard = memo(({ product, onAddToCart }: ProductCardProps) => {
   const [quantity, setQuantity] = useState(1);
-  const [inventory, setInventory] = useState<{
-    stock_quantity: number;
-    status: string;
-  } | null>(null);
-
-  useEffect(() => {
-    fetchInventory();
-  }, [product.id]);
-
-  const fetchInventory = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('inventory')
-        .select('stock_quantity, status')
-        .eq('product_id', product.id)
-        .single();
-      
-      if (error && error.code !== 'PGRST116') { // Not found is ok
-        console.error('Error fetching inventory:', error);
-      } else {
-        setInventory(data);
-      }
-    } catch (error) {
-      console.error('Error fetching inventory:', error);
-    }
-  };
+  const { inventory: allInventory } = useInventory();
+  
+  const inventory = allInventory[product.id] || null;
 
   const getStockBadge = () => {
     if (!inventory) return null;
@@ -114,6 +91,10 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
               src={product.image} 
               alt={product.name}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              loading="lazy"
+              decoding="async"
+              width="300"
+              height="200"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -182,6 +163,6 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
       </CardContent>
     </Card>
   );
-};
+});
 
 export default ProductCard;
