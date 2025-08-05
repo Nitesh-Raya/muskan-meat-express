@@ -12,3 +12,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://muskanmeatshop.com/sitemap.xml
+
+# Crawl delay to be respectful
+Crawl-delay: 1
