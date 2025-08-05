@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Menu, X, Phone, MapPin } from 'lucide-react';
+import muskanLogo from '@/assets/muskan-logo.png';
 
 interface HeaderProps {
   cartItems: number;
@@ -34,9 +35,11 @@ const Header = ({ cartItems, onCartClick }: HeaderProps) => {
         {/* Main header */}
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-hover rounded-lg flex items-center justify-center text-primary-foreground font-bold text-xl shadow-md">
-              M
-            </div>
+            <img 
+              src={muskanLogo} 
+              alt="Muskan Meat Shop Logo" 
+              className="w-12 h-12 object-contain"
+            />
             <div>
               <h1 className="text-2xl font-bold text-foreground">Muskan Meat Shop</h1>
               <p className="text-sm text-muted-foreground">Fresh • Quality • Hygienic</p>
